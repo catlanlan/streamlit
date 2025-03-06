@@ -4,7 +4,6 @@ import fitz  # PyMuPDF for PDF handling
 import docx  # python-docx for Word handling
 from difflib import ndiff
 
-
 def highlight_differences(text1, text2):
     diff = list(ndiff(str(text1), str(text2)))
     highlighted_text1, highlighted_text2 = "", ""
@@ -20,22 +19,18 @@ def highlight_differences(text1, text2):
 
     return highlighted_text1, highlighted_text2
 
-
 def extract_text_from_pdf(uploaded_file):
     doc = fitz.open(stream=uploaded_file.read(), filetype="pdf")
     text = "\n".join([page.get_text("text") for page in doc])
     return text
-
 
 def extract_text_from_docx(uploaded_file):
     doc = docx.Document(uploaded_file)
     text = "\n".join([para.text for para in doc.paragraphs])
     return text
 
-
 def compare_texts(text1, text2):
     return highlight_differences(text1, text2)
-
 
 def main():
     st.title("📊 文本、表格、文档对比工具")
@@ -93,7 +88,6 @@ def main():
             with col2:
                 st.markdown(f"<div style='padding:10px; border:1px solid #ddd'>{highlighted_modified}</div>",
                             unsafe_allow_html=True)
-
 
 if __name__ == "__main__":
     main()
