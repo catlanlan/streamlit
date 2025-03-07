@@ -18,9 +18,8 @@ def highlight_differences(text1, text2):
 
     return highlighted_text1, highlighted_text2
 
-
 def main():
-    st.title("📝 文本对比工具")
+    st.title("文本对比工具")
     st.write("在左侧输入原文本，在右侧输入修改后的文本，点击 Compare 进行对比。")
 
     if "history" not in st.session_state:
@@ -32,22 +31,21 @@ def main():
     with col2:
         modified_text = st.text_area("修改后文本", height=200)
 
-    if st.button("Compare 🚀"):
+    if st.button("Compare"):
         highlighted_original, highlighted_modified = highlight_differences(original_text, modified_text)
         st.session_state.history.append((highlighted_original, highlighted_modified))
-        st.success("对比完成！✨")
+        st.success("对比完成！")
 
     if st.session_state.history:
-        st.write("### 📜 历史对比记录")
+        st.write("历史对比记录")
         for idx, (old, new) in enumerate(reversed(st.session_state.history), 1):
-            st.markdown(f"**对比记录 {idx}**")
+            st.markdown(f"对比记录")
             col1, col2 = st.columns(2)
             with col1:
                 st.markdown(f"<div style='padding:10px; border:1px solid #ddd'>{old}</div>", unsafe_allow_html=True)
             with col2:
                 st.markdown(f"<div style='padding:10px; border:1px solid #ddd'>{new}</div>", unsafe_allow_html=True)
             st.markdown("---")
-
 
 if __name__ == "__main__":
     main()
