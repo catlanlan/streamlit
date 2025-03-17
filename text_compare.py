@@ -26,11 +26,11 @@ def main():
     image = Image.open("logo.png")
     st.image(image, width=80)
 
-    st.markdown('<h2 style="text-align: center; color: #4BA6E0;">文本对比工具</h2>', unsafe_allow_html=True)
+    st.markdown('<h2 style="text-align: center; color: #4BA6E0;font-size: 48px;">文本对比工具</h2>', unsafe_allow_html=True)
 
     # 初始化存储数据
     if "texts" not in st.session_state:
-        st.session_state.texts = [{"修改前": "", "修改后": ""} for _ in range(5)]
+        st.session_state.texts = [{"修改前": "", "修改后": ""} for _ in range(2)]
 
     # 渲染文本框界面
     for i in range(len(st.session_state.texts)):
