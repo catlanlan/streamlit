@@ -10,9 +10,9 @@ def highlight_differences(text1, text2):
     highlighted_text2 = ""  # 修改后文本
 
     for d in diff:
-        if d.startswith('- '):  # 被删除的部分（红色）
+        if d.startswith('- '):
             highlighted_text1 += f'<span style="background-color:#ffcccb">{html.escape(d[2:])}</span>'
-        elif d.startswith('+ '):  # 新增的部分（绿色）
+        elif d.startswith('+ '):
             highlighted_text2 += f'<span style="background-color:#90EE90">{html.escape(d[2:])}</span>'
         else:
             highlighted_text1 += html.escape(d[2:])
@@ -21,7 +21,7 @@ def highlight_differences(text1, text2):
     return highlighted_text1.strip(), highlighted_text2.strip()  # 去掉空白行
 
 def main():
-    st.set_page_config(layout="wide")  # 宽屏模式
+    st.set_page_config(layout="wide")
 
     image = Image.open("logo.png")
     st.image(image, width=80)
@@ -37,25 +37,36 @@ def main():
         st.write(f"### 第 {i+1} 行")
 
         col1, col2 = st.columns([1, 1])
-
         with col1:
-            old_text = st.text_area("修改前", st.session_state.texts[i]["修改前"], key=f"old_{i}")
-        with col2:
-            new_text = st.text_area("修改后", st.session_state.texts[i]["修改后"], key=f"new_{i}")
+            st.session_state.texts[i]["修改前"] = st.text_area(
+                "修改前",
+                st.session_state.texts[i]["修改前"],
+                key=f"old_{i}",
+                height=100,  # 设置文本框高度为100，减少空白区域
+                max_chars=2000
+            )
 
-        # 更新 session 数据
-        st.session_state.texts[i]["修改前"] = old_text
-        st.session_state.texts[i]["修改后"] = new_text
+        with col2:
+            st.session_state.texts[i]["修改后"] = st.text_area(
+                "修改后",
+                st.session_state.texts[i]["修改后"],
+                key=f"new_{i}",
+                height=100,  # 设置文本框高度为100，减少空白区域
+                max_chars=2000
+            )
 
         # 计算高亮对比
-        highlighted_text1, highlighted_text2 = highlight_differences(old_text, new_text)
+        highlighted_text1, highlighted_text2 = highlight_differences(
+            st.session_state.texts[i]["修改前"],
+            st.session_state.texts[i]["修改后"]
+        )
 
-        # 在文本框下方显示高亮对比（稍微缩小）
+        # 在文本框下方显示高亮对比
         col1, col2 = st.columns([1, 1])
         with col1:
             st.markdown(
                 f"""
-                <div style="white-space: pre-wrap; border: 1px solid #bbb; padding: 6px; border-radius: 4px; background-color: #f3f3f3; font-size: 14px;">
+                <div style="white-space: pre-wrap; border: 1px solid #bbb; padding: 3px; border-radius: 3px; background-color: #f3f3f3; font-size: 14px;">
                     {highlighted_text1}
                 </div>
                 """,
@@ -65,7 +76,7 @@ def main():
         with col2:
             st.markdown(
                 f"""
-                <div style="white-space: pre-wrap; border: 1px solid #bbb; padding: 6px; border-radius: 4px; background-color: #f3f3f3; font-size: 14px;">
+                <div style="white-space: pre-wrap; border: 1px solid #bbb; padding: 3px; border-radius: 3px; background-color: #f3f3f3; font-size: 14px;">
                     {highlighted_text2}
                 </div>
                 """,
@@ -77,6 +88,7 @@ def main():
     with col_buttons:
         if st.button("➕ 添加行"):
             st.session_state.texts.append({"修改前": "", "修改后": ""})
+            st.rerun()  # 触发页面更新
 
 if __name__ == "__main__":
     main()
