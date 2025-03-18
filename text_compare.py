@@ -34,15 +34,16 @@ def main():
 
     # 渲染文本框界面
     for i in range(len(st.session_state.texts)):
-        st.write(f"### 第 {i+1} 行")
+        st.write(f'<h3 style="font-size: 14px;">第 {i + 1} 行</h3>', unsafe_allow_html=True)
 
+        # 将两列宽度设置为100%以消除缝隙
         col1, col2 = st.columns([1, 1])
         with col1:
             st.session_state.texts[i]["修改前"] = st.text_area(
                 "修改前",
                 st.session_state.texts[i]["修改前"],
                 key=f"old_{i}",
-                height=100,  # 设置文本框高度为100，减少空白区域
+                height=80,  # 设置文本框高度为80，减少空白区域
                 max_chars=2000
             )
 
@@ -51,7 +52,7 @@ def main():
                 "修改后",
                 st.session_state.texts[i]["修改后"],
                 key=f"new_{i}",
-                height=100,  # 设置文本框高度为100，减少空白区域
+                height=80,  # 设置文本框高度为80，减少空白区域
                 max_chars=2000
             )
 
@@ -67,7 +68,7 @@ def main():
             st.markdown(
                 f"""
                 <div style="white-space: pre-wrap; border: 1px solid #bbb; padding: 3px; border-radius: 3px; background-color: #f3f3f3; font-size: 14px;">
-                    {highlighted_text1}
+                    {highlighted_text1.strip()}
                 </div>
                 """,
                 unsafe_allow_html=True
@@ -77,7 +78,7 @@ def main():
             st.markdown(
                 f"""
                 <div style="white-space: pre-wrap; border: 1px solid #bbb; padding: 3px; border-radius: 3px; background-color: #f3f3f3; font-size: 14px;">
-                    {highlighted_text2}
+                    {highlighted_text2.strip()}
                 </div>
                 """,
                 unsafe_allow_html=True
